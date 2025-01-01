@@ -44,6 +44,8 @@ It only demonstrates "how phishing works". <b>You shall not misuse the informati
   - Localhost
   - Ngrok (With or without hotspot)
   - Cloudflared (Alternative of Ngrok)
+  - Serveo (Alternative of Cloudflared)
+  - LocalXpose
 
 
 ### Installation
@@ -74,6 +76,8 @@ $ docker run --rm -it LxaNce-Hacker/lxancephisher
 - `wget`
 - `curl`
 - `git`
+- `which`
+- `ssh`
 
 > All the dependencies will be installed automatically when you run `lxancephisher` for the first time.
 
