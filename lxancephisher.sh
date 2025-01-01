@@ -620,6 +620,8 @@ Cleanuri() {
 
 custom_url() {
 	url=${1#http*//}
+	sleep 2
+	lxance="https://lxance.site/u/?url="
 	cleanuri="https://cleanuri.com/api/v1/shorten"
 	isgd="https://www.is.gd/create.php?format=simple&url="
 	shortcode="https://api.shrtco.de/v2/shorten?url="
@@ -627,7 +629,10 @@ custom_url() {
 
 	{ custom_mask; sleep 1; clear; banner_small; }
 	if [[ ${url} =~ [-a-zA-Z0-9.]*(ngrok.io|trycloudflare.com|loclx.io) ]]; then
-		if [[ $(curl -i -s -X POST -d "url=https://example.com" https://cleanuri.com/api/v1/shorten | grep -i 'HTTP/' | awk '{print $2}') == 2* ]]; then
+		echo -e "\n\n${RED}[${WHITE}-${RED}]${GREEN} URL matches allowed domains..."
+		if [[ $(site_stat $lxance) == 2* ]]; then
+            shorten $lxance "$url"
+		elif [[ $(curl -i -s -X POST -d "url=https://example.com" https://cleanuri.com/api/v1/shorten | grep -i 'HTTP/' | awk '{print $2}') == 2* ]]; then
 			Cleanuri $cleanuri "https://$url"
 		elif [[ $(site_stat $isgd) == 2* ]]; then
 			shorteny $isgd "$url"
