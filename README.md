@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.1-green?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Version-2.2-green?style=for-the-badge">
   <img src="https://img.shields.io/github/license/LxaNce/RealLxPhisher?style=for-the-badge">
   <img src="https://img.shields.io/github/stars/LxaNce/RealLxPhisher?style=for-the-badge">
   <img src="https://img.shields.io/github/issues/LxaNce/RealLxPhisher?color=red&style=for-the-badge">
@@ -52,7 +52,7 @@ It only demonstrates "how phishing works". <b>You shall not misuse the informati
 
 - Just, Clone this repository -
 ```
-$ git clone https://github.com/LxaNce-Hacker/lxancephisher
+$ git clone --depth=1 https://github.com/LxaNce-Hacker/lxancephisher
 ```
 
 - Change to cloned directory and run `lxancephisher.sh` -
@@ -63,15 +63,36 @@ $ bash lxancephisher.sh
 <!-- lxphisher -->
 - On first launch, It'll install the dependencies and that's it. `lxancephisher` is installed.
 
+##
+### Installation via ".deb" file
+
+- Download `.deb` files from the [**Latest Release**](https://github.com/LxaNce-Hacker/lxancephisher/releases/latest)
+- If you are using ***termux*** then download the `*_termux.deb`
+
+- Install the `.deb` file by executing
+  ```
+  apt install <your path to deb file>
+  ```
+  Or
+  ```
+  $ dpkg -i <your path to deb file>
+  $ apt install -f
+  ```
+
+##
+
 ### Run on Docker
 ```
 $ docker pull LxaNce-Hacker/lxancephisher
 $ docker run --rm -it LxaNce-Hacker/lxancephisher
 ```
 
-### Dependencies
+##
 
-**`lxancephisher`** requires following programs to run properly - 
+<details>
+  <summary><h3>Dependencies</h3></summary>
+
+<b>lxancephisher</b> requires following programs to run properly - 
 - `php`
 - `wget`
 - `curl`
@@ -79,29 +100,36 @@ $ docker run --rm -it LxaNce-Hacker/lxancephisher
 - `which`
 - `ssh`
 
-> All the dependencies will be installed automatically when you run `lxancephisher` for the first time.
+> All the dependencies will be installed automatically when you run **lxancephisher** for the first time.
+</details>
 
-> Supported Platform : **`Termux`**, **`Ubuntu/Debian/Kali/Parrot`**, **`Garuda/Arch Linux/Manjaro`**, **`Fedora`**
+<details>
+  <summary><h3>Tested on</h3></summary>
+
+- **Ubuntu**
+- **Debian**
+- **Arch**
+- **Manjaro**
+- **Fedora**
+- **Termux**
+</details>
 
 ##
 <!-- lxphisher -->
 
 
-<h3 align="center">
-:: Workflow ::
-<!--</h3>
-<p align="center">
-<img src=".imgs/wf.gif"/>
-</p>-->
-<br>
+<h3 align="center"><i>:: Workflow ::</i></h3>
 <p align="center">
 <img width="49%" src=".img/SS1.png"/>
 <img width="49%" src=".img/SS2.png"/>
 </p>
+
+##
+
 ### Find Me on :
 <p align="left">
   <a href="https://github.com/LxaNce-Hacker" target="_blank"><img src="https://img.shields.io/badge/Github-LxaNce--Hacker-green?style=for-the-badge&logo=github"></a>
-  <a href="https://www.instagram.com/lxance.exe" target="_blank"><img src="https://img.shields.io/badge/IG-%40lxance-red?style=for-the-badge&logo=instagram"></a>
+  <a href="https://www.instagram.com/lxance.hacker" target="_blank"><img src="https://img.shields.io/badge/IG-%40lxance-red?style=for-the-badge&logo=instagram"></a>
   <a href="https://chat.whatsapp.com/Dorez09CKKSG9mnwHadC5n" target="_blank"><img src="https://img.shields.io/badge/Whatsapp-blue?style=for-the-badge&logo=whatsapp"></a>
 </p>
 
