@@ -2,12 +2,12 @@
 
 # Make Deb Package for lxancephisher (^.^)
 _PACKAGE=lxancephisher
-_VERSION=2.1
+_VERSION=2.2
 _ARCH="all"
 PKG_NAME="${_PACKAGE}_${_VERSION}_${_ARCH}.deb"
 
 if [[ ! -e "scripts/launch.sh" ]]; then
-        echo "lauch.sh should be in the \`scripts\` Directory. Exiting..."
+        echo "launch.sh should be in the \`scripts\` Directory. Exiting..."
         exit 1
 fi
 
